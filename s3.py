@@ -14,16 +14,15 @@ def upload_file(file_name):
     response = object_acl.put(ACL='public-read')
     return response
 
-def download_file():
+def download_file(file_name):
     s3  = boto3.resource(
         's3',
         aws_access_key_id=s3_config.AWS_ACCESS_KEY_ID,
         aws_secret_access_key=s3_config.AWS_SECRET_ACCESS_KEY,
         region_name=s3_config.AWS_DEFAULT_REGION
     )
-
     try:
-        s3.Bucket(s3_config.BUCKET_NAME).download_file("stock.xlsx", 'stock.xlsx')
+        s3.Bucket(s3_config.BUCKET_NAME).download_file(file_name, file_name)
     except botocore.exceptions.ClientError as e:
         return False
 
