@@ -67,12 +67,22 @@ def analysis_data(data , excel_name):
 
     return data
 
+def color_negative_red(val):
+    background_color = "white"
+    color = "black"
+    if "%" in val:
+        val = float(val.replace("%", ""))
+        background_color = 'green' if val > 1 else 'white'
+        color = 'red' if val < 0 else 'black'
+
+    return 'background-color:{0}; color:{1};'.format(background_color , color)
 
 # hanlde on excel
 def handle_excel(data , excel_name):
     sheet_name = datetime.date.today().strftime("%B %d, %Y")
     try:
         df = pd.DataFrame(data)
+        df = df.style.applymap(color_negative_red)
         writer = pd.ExcelWriter(excel_name, engine='openpyxl')
         if os.path.isfile(excel_name):
             book = load_workbook(excel_name)
